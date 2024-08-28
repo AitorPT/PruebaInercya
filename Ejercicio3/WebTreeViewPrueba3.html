@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba EJ 3</title>
+    <style>
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-left: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .tree {
+            font-family: Arial, sans-serif;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prueba ej 3</h1>
+    <div class="tree">
+        <ul id="treeContainer"></ul>
+    </div>
+
+    <script>
+        // Función para cargar el archivo JSON y generar el árbol
+        async function fetchAndRenderTree() {
+            try {
+                const response = await fetch('Items.json'); // Lee el archivo items.json
+                const data = await response.json();         // Convierte la respuesta a formato JSON
+                const treeContainer = document.getElementById('treeContainer');
+                
+                // Llamada a la función recursiva para generar el árbol
+                generateTree(treeContainer, data);
+            } catch (error) {
+                console.error('Error al cargar el archivo JSON:', error);
+            }
+        }
+
+        // Función recursiva para generar el árbol con <ul> y <li>
+        function generateTree(parentElement, nodes) {
+            if (!nodes || nodes.length === 0) {
+                return;
+            }
+
+            const ul = document.createElement('ul'); // Crea una nueva lista <ul>
+            parentElement.appendChild(ul);
+
+            nodes.forEach(node => {
+                const li = document.createElement('li'); // Crea un nuevo elemento <li>
+                li.textContent = node.Name;              // Asigna el nombre del nodo al <li>
+
+                ul.appendChild(li);
+
+                // Si el nodo tiene hijos, llama recursivamente a generateTree
+                if (node.Children && node.Children.length > 0) {
+                    generateTree(li, node.Children);
+                }
+            });
+        }
+
+        // Ejecutar la función para cargar el JSON y renderizar el árbol al cargar la página
+        fetchAndRenderTree();
+    </script>
+</body>
+</html>
